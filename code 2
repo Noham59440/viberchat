@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+
+  import 'package:flutter/material.dart';
 
 void main() {
   runApp(const ViberChatApp());
@@ -77,7 +78,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 }
 
-// 1. STYLE DE L'ÉCRAN DE CHAT
+// 1. STYLE DE L'ÉCRAN DE CHAT (Anonyme)
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
 
@@ -127,7 +128,7 @@ class StoriesScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(8.0),
         children: const [
-          Text("Stories Privées (Amis)", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.tealAccent)),
+          Text("Stories Privées", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.tealAccent)),
           SizedBox(height: 10),
           SizedBox(
             height: 90,
@@ -174,7 +175,7 @@ class StoryAvatar extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 5),
-          Text("Ami $name", style: const TextStyle(fontSize: 12)),
+          Text("Compte $name", style: const TextStyle(fontSize: 12)),
         ],
       ),
     );
