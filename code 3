@@ -1,0 +1,258 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const ViberChatApp());
+}
+
+class ViberChatApp extends StatelessWidget {
+  const ViberChatApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'ViberChat',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.teal,
+        scaffoldBackgroundColor: const Color(0xFF0F172A),
+      ),
+      home: const MainScreen(),
+    );
+  }
+}
+
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  int _currentIndex = 0;
+
+  final List<Widget> _screens = [
+    const ChatScreen(),
+    const StoriesScreen(),
+    const CameraScreen(),
+    const VibeslightScreen(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _screens[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: const Color(0xFF1E293B),
+        selectedItemColor: Colors.tealAccent,
+        unselectedItemColor: Colors.white60,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat_bubble_outline),
+            label: 'Chat',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.auto_stories),
+            label: 'Stories',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.camera_alt),
+            label: 'Camera',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.play_circle_outline),
+            label: 'Vibeslight',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// 1. STYLE DE L'ÉCRAN DE CHAT
+class ChatScreen extends StatelessWidget {
+  const ChatScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final List<Map<String, String>> dummyChats = [
+      {"name": "Contact 1", "message": "Nouveau message...", "status": "🔥"},
+      {"name": "Contact 2", "message": "Appui long pour revoir", "status": "❤️"},
+      {"name": "Contact 3", "message": "Envoyé il y a 1h", "status": "✨"},
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Chat'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: ListView.builder(
+        itemCount: dummyChats.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            leading: CircleAvatar(
+              backgroundColor: Colors.teal.shade700,
+              child: Text(dummyChats[index]["name"]![0]),
+            ),
+            title: Text(dummyChats[index]["name"]!, style: const TextStyle(fontWeight: FontWeight.bold)),
+            subtitle: Text(dummyChats[index]["message"]!),
+            trailing: Text(dummyChats[index]["status"]!, style: const TextStyle(fontSize: 18)),
+          );
+        },
+      ),
+    );
+  }
+}
+
+// 2. STYLE DE L'ÉCRAN DES STORIES (Publiques & Privées)
+class StoriesScreen extends StatelessWidget {
+  const StoriesScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Stories'),
+        backgroundColor: Colors.transparent,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(8.0),
+        children: const [
+          Text("Stories Privées (Amis)", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.tealAccent)),
+          SizedBox(height: 10),
+          SizedBox(
+            height: 90,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                StoryAvatar(name: "A"),
+                StoryAvatar(name: "B"),
+                StoryAvatar(name: "C"),
+              ],
+            ),
+          ),
+          SizedBox(height: 20),
+          Text("Comptes Publics", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.tealAccent)),
+          SizedBox(height: 10),
+          ListTile(
+            leading: Icon(Icons.public, color: Colors.teal),
+            title: Text("Créateur Public 1"),
+            subtitle: Text("Nouvelle story publiée"),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class StoryAvatar extends StatelessWidget {
+  final String name;
+  const StoryAvatar({super.key, required this.name});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 30,
+            backgroundColor: Colors.tealAccent,
+            child: CircleAvatar(
+              radius: 27,
+              backgroundColor: Colors.grey.shade800,
+              child: Text(name),
+            ),
+          ),
+          const SizedBox(height: 5),
+          Text("Ami $name", style: const TextStyle(fontSize: 12)),
+        ],
+      ),
+    );
+  }
+}
+
+// 3. STYLE DE LA CAMERA
+class CameraScreen extends StatelessWidget {
+  const CameraScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          Container(
+            color: Colors.black87,
+            child: const Center(
+              child: Text(
+                "Interface Caméra & Filtres",
+                style: TextStyle(color: Colors.white54, fontSize: 16),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 40,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Container(
+                height: 80,
+                width: 80,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 4),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// 4. STYLE DES VIBESLIGHT (Shorts / Vidéos)
+class VibeslightScreen extends StatelessWidget {
+  const VibeslightScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Stack(
+        children: [
+          const Center(
+            child: Text(
+              "Fil Vibeslight (Vidéos type TikTok)",
+              style: TextStyle(color: Colors.white70, fontSize: 16),
+            ),
+          ),
+          Positioned(
+            right: 16,
+            bottom: 100,
+            child: Column(
+              children: const [
+                Icon(Icons.favorite, color: Colors.red, size: 36),
+                Text("2.7k", style: TextStyle(color: Colors.white)),
+                SizedBox(height: 20),
+                Icon(Icons.comment, color: Colors.white, size: 36),
+                Text("80", style: TextStyle(color: Colors.white)),
+                SizedBox(height: 20),
+                Icon(Icons.share, color: Colors.white, size: 36),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
